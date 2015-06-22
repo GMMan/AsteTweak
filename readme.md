@@ -27,6 +27,11 @@ Version Compatibility
 =====================
 This program is compatible with the following versions of the game:
 
-* Steam 2.0.4.0
+* Steam 2.04
+* Trial 1.10
+* Trial 1.12
 
 Other versions will be added as I find them and when I have time to do so.
+
+I do not have a DRM-free copy of the game, and the patches released on Edelweiss' site do not include complete files,
+so I'll add support for DRM-free versions whenever I happen upon a copy.
