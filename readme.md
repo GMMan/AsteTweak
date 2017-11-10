@@ -30,6 +30,7 @@ This program is compatible with the following versions of the game:
 * Steam 2.04
 * Trial 1.10
 * Trial 1.12
+* Steam 3.00 (Definitive Edition)
 
 Other versions will be added as I find them and when I have time to do so.
 

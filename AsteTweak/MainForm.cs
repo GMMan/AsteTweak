@@ -15,7 +15,7 @@ namespace AsteTweak
     {
         string curPath;
         Offsets.Resolution curRes;
-        Offsets.KeyMapping curKeys;
+        Offsets.IKeyMapping curKeys;
         TextBox textEditor = new TextBox { Visible = false };
         KeyReaderControl keyEditor = new KeyReaderControl { Visible = false };
 
@@ -27,11 +27,6 @@ namespace AsteTweak
 
             verLabel.Text = string.Format(verLabel.Text, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
             verLabel.Left = Size.Width - 28 - verLabel.Width;
-
-            // Set restrictions on key mapping bit widths
-            int[] narrowKeys = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 24, 27 };
-            for (int i = 0; i < mapListView.Items.Count; ++i) mapListView.Items[i].SubItems[0].Tag = 32;
-            foreach (int i in narrowKeys) mapListView.Items[i].SubItems[0].Tag = 7;
 
             try
             {
@@ -52,7 +47,7 @@ namespace AsteTweak
         // Autodetect for Steam version
         string getSteamVersionLocation()
         {
-            using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32))
+            using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default))
             {
                 using (RegistryKey appUnistKey = hklm.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 283680"))
                 {
@@ -108,95 +103,41 @@ namespace AsteTweak
                 }
 
                 // Read mappings
-                Keys key;
-
-                fs.Seek(curKeys.Up, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[0].Tag = key;
-                mapListView.Items[0].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Down, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[1].Tag = key;
-                mapListView.Items[1].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Left, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[2].Tag = key;
-                mapListView.Items[2].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Right, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[3].Tag = key;
-                mapListView.Items[3].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Numpad8, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[4].Tag = key;
-                mapListView.Items[4].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Numpad2, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[5].Tag = key;
-                mapListView.Items[5].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Numpad4, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[6].Tag = key;
-                mapListView.Items[6].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Numpad6, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[7].Tag = key;
-                mapListView.Items[7].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Oem1, SeekOrigin.Begin);
-                key = (Keys)br.ReadUInt32();
-                mapListView.Items[8].Tag = key;
-                mapListView.Items[8].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Oem102, SeekOrigin.Begin);
-                key = (Keys)br.ReadUInt32();
-                mapListView.Items[9].Tag = key;
-                mapListView.Items[9].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Oem2, SeekOrigin.Begin);
-                key = (Keys)br.ReadUInt32();
-                mapListView.Items[10].Tag = key;
-                mapListView.Items[10].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Oem6, SeekOrigin.Begin);
-                key = (Keys)br.ReadUInt32();
-                mapListView.Items[11].Tag = key;
-                mapListView.Items[11].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.TableBegin, SeekOrigin.Begin);
-                for (int i = 12; i < 24; ++i)
+                mapListView.Items.Clear();
+                Dictionary<int, PropertyDescriptor> propsDict = new Dictionary<int, PropertyDescriptor>();
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(curKeys))
                 {
-                    key = (Keys)br.ReadUInt32();
-                    mapListView.Items[i].Tag = key;
-                    mapListView.Items[i].SubItems[1].Text = key.ToString();
+                    var ikAttr = prop.Attributes.Count > 0 ? prop.Attributes[0] as InputKeyAttribute : null;
+                    if (ikAttr != null)
+                    {
+                        propsDict[ikAttr.Order] = prop;
+                    }
                 }
 
-                fs.Seek(curKeys.Return, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[24].Tag = key;
-                mapListView.Items[24].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.LShift, SeekOrigin.Begin);
-                key = (Keys)br.ReadUInt32();
-                mapListView.Items[25].Tag = key;
-                mapListView.Items[25].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.RShift, SeekOrigin.Begin);
-                key = (Keys)br.ReadUInt32();
-                mapListView.Items[26].Tag = key;
-                mapListView.Items[26].SubItems[1].Text = key.ToString();
-
-                fs.Seek(curKeys.Escape, SeekOrigin.Begin);
-                key = (Keys)br.ReadByte();
-                mapListView.Items[27].Tag = key;
-                mapListView.Items[27].SubItems[1].Text = key.ToString();
+                foreach (var prop in propsDict.OrderBy(p => p.Key).Select(p => p.Value))
+                {
+                    var ikAttr = prop.Attributes[0] as InputKeyAttribute;
+                    if (prop.Name == nameof(Offsets.IKeyMapping.TableBegin))
+                    {
+                        fs.Seek(curKeys.TableBegin, SeekOrigin.Begin);
+                        for (int i = 0; i < curKeys.TableNames.Length; ++i)
+                        {
+                            Keys key = (Keys)br.ReadUInt32();
+                            var itm = new ListViewItem(new string[] { curKeys.TableNames[i], key.ToString() }) { Tag = key };
+                            itm.SubItems[0].Tag = 32;
+                            mapListView.Items.Add(itm);
+                        }
+                    }
+                    else
+                    {
+                        uint offset = (uint)prop.GetValue(curKeys);
+                        fs.Seek(offset, SeekOrigin.Begin);
+                        Keys key = (Keys)(ikAttr.IsLong ? br.ReadUInt32() : br.ReadByte());
+                        var itm = new ListViewItem(new string[] { ikAttr.Name, key.ToString() }) { Tag = key };
+                        itm.SubItems[0].Tag = ikAttr.IsLong ? 32 : 7;
+                        mapListView.Items.Add(itm);
+                    }
+                }
             }
         }
 
@@ -216,61 +157,38 @@ namespace AsteTweak
                 }
 
                 // Write key mappings
-                fs.Seek(curKeys.Up, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[0].Tag);
-
-                fs.Seek(curKeys.Down, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[1].Tag);
-
-                fs.Seek(curKeys.Left, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[2].Tag);
-
-                fs.Seek(curKeys.Right, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[3].Tag);
-
-                fs.Seek(curKeys.Numpad8, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[4].Tag);
-
-                fs.Seek(curKeys.Numpad2, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[5].Tag);
-
-                fs.Seek(curKeys.Numpad4, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[6].Tag);
-
-                fs.Seek(curKeys.Numpad6, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[7].Tag);
-
-                fs.Seek(curKeys.Oem1, SeekOrigin.Begin);
-                bw.Write((uint)(Keys)mapListView.Items[8].Tag);
-
-                fs.Seek(curKeys.Oem102, SeekOrigin.Begin);
-                bw.Write((uint)(Keys)mapListView.Items[9].Tag);
-
-                fs.Seek(curKeys.Oem2, SeekOrigin.Begin);
-                bw.Write((uint)(Keys)mapListView.Items[10].Tag);
-
-                fs.Seek(curKeys.Oem6, SeekOrigin.Begin);
-                bw.Write((uint)(Keys)mapListView.Items[11].Tag);
-
-                fs.Seek(curKeys.TableBegin, SeekOrigin.Begin);
-                for (int i = 12; i < 24; ++i)
+                Dictionary<int, PropertyDescriptor> propsDict = new Dictionary<int, PropertyDescriptor>();
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(curKeys))
                 {
-                    bw.Write((uint)(Keys)mapListView.Items[i].Tag);
+                    var ikAttr = prop.Attributes.Count > 0 ? prop.Attributes[0] as InputKeyAttribute : null;
+                    if (ikAttr != null)
+                    {
+                        propsDict[ikAttr.Order] = prop;
+                    }
                 }
 
-                fs.Seek(curKeys.Return, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[24].Tag);
-
-                fs.Seek(curKeys.LShift, SeekOrigin.Begin);
-                bw.Write((uint)(Keys)mapListView.Items[25].Tag);
-
-                fs.Seek(curKeys.RShift, SeekOrigin.Begin);
-                bw.Write((uint)(Keys)mapListView.Items[26].Tag);
-
-                fs.Seek(curKeys.Escape, SeekOrigin.Begin);
-                bw.Write((byte)(Keys)mapListView.Items[27].Tag);
-
-                fs.Flush();
+                foreach (var prop in propsDict.OrderBy(p => p.Key).Select(p => p.Value))
+                {
+                    var ikAttr = prop.Attributes[0] as InputKeyAttribute;
+                    if (prop.Name == nameof(Offsets.IKeyMapping.TableBegin))
+                    {
+                        fs.Seek(curKeys.TableBegin, SeekOrigin.Begin);
+                        for (int i = 0; i < curKeys.TableNames.Length; ++i)
+                        {
+                            bw.Write((uint)((Keys)mapListView.Items[ikAttr.Order + i].Tag));
+                        }
+                    }
+                    else
+                    {
+                        uint offset = (uint)prop.GetValue(curKeys);
+                        fs.Seek(offset, SeekOrigin.Begin);
+                        Keys key = (Keys)mapListView.Items[ikAttr.Order].Tag;
+                        if (ikAttr.IsLong)
+                            bw.Write((uint)key);
+                        else
+                            bw.Write((byte)key);
+                    }
+                }
             }
         }
 

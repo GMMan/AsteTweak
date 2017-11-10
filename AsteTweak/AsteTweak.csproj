@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InputKeyAttribute.cs" />
     <Compile Include="KeyReaderControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
