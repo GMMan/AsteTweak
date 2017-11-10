@@ -104,19 +104,23 @@ namespace AsteTweak
 
                 // Read mappings
                 mapListView.Items.Clear();
-                Dictionary<int, PropertyDescriptor> propsDict = new Dictionary<int, PropertyDescriptor>();
+                var propsDict = new Dictionary<int, Tuple<InputKeyAttribute, PropertyDescriptor>>();
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(curKeys))
                 {
-                    var ikAttr = prop.Attributes.Count > 0 ? prop.Attributes[0] as InputKeyAttribute : null;
-                    if (ikAttr != null)
+                    foreach (Attribute attr in prop.Attributes)
                     {
-                        propsDict[ikAttr.Order] = prop;
+                        if (attr is InputKeyAttribute ikAttr)
+                        {
+                            propsDict[ikAttr.Order] = new Tuple<InputKeyAttribute, PropertyDescriptor>(ikAttr, prop);
+                            break;
+                        }
                     }
                 }
 
-                foreach (var prop in propsDict.OrderBy(p => p.Key).Select(p => p.Value))
+                foreach (var tup in propsDict.OrderBy(p => p.Key).Select(p => p.Value))
                 {
-                    var ikAttr = prop.Attributes[0] as InputKeyAttribute;
+                    var ikAttr = tup.Item1;
+                    var prop = tup.Item2;
                     if (prop.Name == nameof(Offsets.IKeyMapping.TableBegin))
                     {
                         fs.Seek(curKeys.TableBegin, SeekOrigin.Begin);
@@ -157,19 +161,23 @@ namespace AsteTweak
                 }
 
                 // Write key mappings
-                Dictionary<int, PropertyDescriptor> propsDict = new Dictionary<int, PropertyDescriptor>();
+                var propsDict = new Dictionary<int, Tuple<InputKeyAttribute, PropertyDescriptor>>();
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(curKeys))
                 {
-                    var ikAttr = prop.Attributes.Count > 0 ? prop.Attributes[0] as InputKeyAttribute : null;
-                    if (ikAttr != null)
+                    foreach (Attribute attr in prop.Attributes)
                     {
-                        propsDict[ikAttr.Order] = prop;
+                        if (attr is InputKeyAttribute ikAttr)
+                        {
+                            propsDict[ikAttr.Order] = new Tuple<InputKeyAttribute, PropertyDescriptor>(ikAttr, prop);
+                            break;
+                        }
                     }
                 }
 
-                foreach (var prop in propsDict.OrderBy(p => p.Key).Select(p => p.Value))
+                foreach (var tup in propsDict.OrderBy(p => p.Key).Select(p => p.Value))
                 {
-                    var ikAttr = prop.Attributes[0] as InputKeyAttribute;
+                    var ikAttr = tup.Item1;
+                    var prop = tup.Item2;
                     if (prop.Name == nameof(Offsets.IKeyMapping.TableBegin))
                     {
                         fs.Seek(curKeys.TableBegin, SeekOrigin.Begin);
