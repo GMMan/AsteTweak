@@ -127,7 +127,9 @@ namespace AsteTweak
             // Trial 1.12
             { 0x52C7EB1B, new Resolution { TableBegin = 0x0027D1B0 } },
             // Steam 3.00
-            { 0x5A02629E, new Resolution { TableBegin = 0x0031C170} }
+            { 0x5A02629E, new Resolution { TableBegin = 0x0031C170} },
+            // DRM-free 3.00
+            { 0x59F2F999, new Resolution { TableBegin = 0x0031B920} }
         };
 
         static Dictionary<uint, IKeyMapping> keyMappings = new Dictionary<uint, IKeyMapping>
@@ -162,6 +164,13 @@ namespace AsteTweak
                 W = 0x0022EAF1, S = 0x0022EB12, A = 0x0022EB2E, D = 0x0022EB4A,
                 TableBegin = 0x003291C8,
                 Return = 0x0022EBA2, LShift = 0x0022EBBA, RShift = 0x0022EBC6, Escape = 0x0022EBDC
+            } },
+            // DRM-free 3.00
+            { 0x59F2F999, new AstebreedDefinitiveKeyMapping {
+                Up = 0x0022E3DF, Down = 0x0022E3FB, Left = 0x0022E417, Right = 0x0022E433,
+                W = 0x0022E3D1, S = 0x0022E3F2, A = 0x0022E40E, D = 0x0022E42A,
+                TableBegin = 0x003286E8,
+                Return = 0x0022E482, LShift = 0x0022E49A, RShift = 0x0022E4A6, Escape = 0x0022E4BC
             } }
             /* Template:
             { 0x, new KeyMapping {
