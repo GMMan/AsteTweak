@@ -98,8 +98,15 @@ namespace AsteTweak
                 for (int i = 0; i < resListView.Items.Count; ++i)
                 {
                     ListViewItem itm = resListView.Items[i];
-                    itm.SubItems[1].Text = br.ReadInt16().ToString();
-                    itm.SubItems[2].Text = br.ReadInt16().ToString();
+                    if (i < curRes.MaxCount)
+                    {
+                        itm.SubItems[1].Text = (curRes.IsLong ? br.ReadInt32() : br.ReadInt16()).ToString();
+                        itm.SubItems[2].Text = (curRes.IsLong ? br.ReadInt32() : br.ReadInt16()).ToString();
+                    }
+                    else
+                    {
+                        itm.SubItems[1].Text = itm.SubItems[2].Text = "N/A";
+                    }
                 }
 
                 // Read mappings
@@ -156,8 +163,19 @@ namespace AsteTweak
                 for (int i = 0; i < resListView.Items.Count; ++i)
                 {
                     ListViewItem itm = resListView.Items[i];
-                    bw.Write(ushort.Parse(itm.SubItems[1].Text));
-                    bw.Write(ushort.Parse(itm.SubItems[2].Text));
+                    if (i < curRes.MaxCount)
+                    {
+                        if (curRes.IsLong)
+                        {
+                            bw.Write(uint.Parse(itm.SubItems[1].Text));
+                            bw.Write(uint.Parse(itm.SubItems[2].Text));
+                        }
+                        else
+                        {
+                            bw.Write(ushort.Parse(itm.SubItems[1].Text));
+                            bw.Write(ushort.Parse(itm.SubItems[2].Text));
+                        }
+                    }
                 }
 
                 // Write key mappings

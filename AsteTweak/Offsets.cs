@@ -16,6 +16,54 @@ namespace AsteTweak
         public class Resolution
         {
             public uint TableBegin { get; set; }
+            public bool IsLong { get; set; }
+            public int MaxCount { get; set; } = 14;
+        }
+
+        public class FairyBloomKeyMapping : IKeyMapping
+        {
+            [InputKey("Up", 0)]
+            public uint Up { get; set; }
+            [InputKey("Down", 1)]
+            public uint Down { get; set; }
+            [InputKey("Left", 2)]
+            public uint Left { get; set; }
+            [InputKey("Right", 3)]
+            public uint Right { get; set; }
+            [InputKey("NumPad 8", 4)]
+            public uint Numpad8 { get; set; }
+            [InputKey("NumPad 2", 5)]
+            public uint Numpad2 { get; set; }
+            [InputKey("NumPad 4", 6)]
+            public uint Numpad4 { get; set; }
+            [InputKey("NumPad 6", 7)]
+            public uint Numpad6 { get; set; }
+            [InputKey("OEM 1", 8, true)]
+            public uint Oem1 { get; set; }
+            [InputKey("OEM 102", 9, true)]
+            public uint Oem102 { get; set; }
+            [InputKey("OEM 2", 10, true)]
+            public uint Oem2 { get; set; }
+            [InputKey("OEM 6", 11, true)]
+            public uint Oem6 { get; set; }
+            [InputKey(null, 12)]
+            public uint TableBegin { get; set; }
+
+            public string[] TableNames { get; } = new string[]
+            {
+                "0Button (Z)",
+                "1Button (X)",
+                "2Button (C)",
+                "3Button (V)",
+                "4Button (A)",
+                "5Button (S)",
+                "6Button (D)",
+                "7Button (F)",
+                "8Button (Q)",
+                "9Button (W)",
+                "10Button (E)",
+                "11Button (R)",
+            };
         }
 
         public class AstebreedKeyMapping : IKeyMapping
@@ -127,9 +175,11 @@ namespace AsteTweak
             // Trial 1.12
             { 0x52C7EB1B, new Resolution { TableBegin = 0x0027D1B0 } },
             // Steam 3.00
-            { 0x5A02629E, new Resolution { TableBegin = 0x0031C170} },
+            { 0x5A02629E, new Resolution { TableBegin = 0x0031C170 } },
             // DRM-free 3.00
-            { 0x59F2F999, new Resolution { TableBegin = 0x0031B920} }
+            { 0x59F2F999, new Resolution { TableBegin = 0x0031B920 } },
+            // Fairy Bloom Freesia Steam 1.12
+            { 0x56AE0E5C, new Resolution { TableBegin = 0x001CB3A0, IsLong = true, MaxCount = 11 } }
         };
 
         static Dictionary<uint, IKeyMapping> keyMappings = new Dictionary<uint, IKeyMapping>
@@ -171,7 +221,14 @@ namespace AsteTweak
                 W = 0x0022E3D1, S = 0x0022E3F2, A = 0x0022E40E, D = 0x0022E42A,
                 TableBegin = 0x003286E8,
                 Return = 0x0022E482, LShift = 0x0022E49A, RShift = 0x0022E4A6, Escape = 0x0022E4BC
-            } }
+            } },
+            // Fairy Bloom Freesia Steam 1.12
+            { 0x56AE0E5C, new FairyBloomKeyMapping {
+                Up = 0x000817FF, Down = 0x0008181D, Left = 0x00081837, Right = 0x00081855,
+                Numpad8 = 0x0008186F, Numpad2 = 0x0008188D, Numpad4 = 0x000818A7, Numpad6 = 0x000818C5,
+                Oem1 = 0x000818DF, Oem102 = 0x00081900, Oem2 = 0x0008191D, Oem6 = 0x0008193E,
+                TableBegin = 0x001CC570,
+            } },
             /* Template:
             { 0x, new KeyMapping {
                 Up = 0x, Down = 0x, Left = 0x, Right = 0x,
