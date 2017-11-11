@@ -96,9 +96,9 @@ namespace AsteTweak
             public uint TableBegin { get; set; }
             [InputKey("Return", 24)]
             public uint Return { get; set; }
-            [InputKey("Left Shift", 25)]
+            [InputKey("Left Shift", 25, true)]
             public uint LShift { get; set; }
-            [InputKey("Right Shift", 26)]
+            [InputKey("Right Shift", 26, true)]
             public uint RShift { get; set; }
             [InputKey("Escape", 27)]
             public uint Escape { get; set; }
@@ -142,9 +142,9 @@ namespace AsteTweak
             public uint TableBegin { get; set; }
             [InputKey("Return", 20)]
             public uint Return { get; set; }
-            [InputKey("Left Shift", 21)]
+            [InputKey("Left Shift", 21, true)]
             public uint LShift { get; set; }
-            [InputKey("Right Shift", 22)]
+            [InputKey("Right Shift", 22, true)]
             public uint RShift { get; set; }
             [InputKey("Escape", 23)]
             public uint Escape { get; set; }
