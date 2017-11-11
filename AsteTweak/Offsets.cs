@@ -179,7 +179,9 @@ namespace AsteTweak
             // DRM-free 3.00
             { 0x59F2F999, new Resolution { TableBegin = 0x0031B920 } },
             // Fairy Bloom Freesia Steam 1.12
-            { 0x56AE0E5C, new Resolution { TableBegin = 0x001CB3A0, IsLong = true, MaxCount = 11 } }
+            { 0x56AE0E5C, new Resolution { TableBegin = 0x001CB3A0, IsLong = true, MaxCount = 11 } },
+            // Ether Vapor Steam 2.08
+            { 0x539C5182, new Resolution { TableBegin = 0x0013C348, IsLong = true, MaxCount = 10 } },
         };
 
         static Dictionary<uint, IKeyMapping> keyMappings = new Dictionary<uint, IKeyMapping>
@@ -228,6 +230,13 @@ namespace AsteTweak
                 Numpad8 = 0x0008186F, Numpad2 = 0x0008188D, Numpad4 = 0x000818A7, Numpad6 = 0x000818C5,
                 Oem1 = 0x000818DF, Oem102 = 0x00081900, Oem2 = 0x0008191D, Oem6 = 0x0008193E,
                 TableBegin = 0x001CC570,
+            } },
+            // Ether Vapor Steam 2.08
+            { 0x539C5182, new FairyBloomKeyMapping {
+                Up = 0x000A2EA1, Down = 0x000A2EBD, Left = 0x000A2ED7, Right = 0x000A2EF5,
+                Numpad8 = 0x000A2F0F, Numpad2 = 0x000A2F2D, Numpad4 = 0x000A2F47, Numpad6 = 0x000A2F65,
+                Oem1 = 0x000A2F7F, Oem102 = 0x000A2FA0, Oem2 = 0x000A2FBD, Oem6 = 0x000A2FDE,
+                TableBegin = 0x0013FAF0,
             } },
             /* Template:
             { 0x, new KeyMapping {

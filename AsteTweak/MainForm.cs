@@ -100,8 +100,8 @@ namespace AsteTweak
                     ListViewItem itm = resListView.Items[i];
                     if (i < curRes.MaxCount)
                     {
-                        itm.SubItems[1].Text = (curRes.IsLong ? br.ReadInt32() : br.ReadInt16()).ToString();
-                        itm.SubItems[2].Text = (curRes.IsLong ? br.ReadInt32() : br.ReadInt16()).ToString();
+                        itm.SubItems[1].Text = (curRes.IsLong ? br.ReadUInt32() : br.ReadUInt16()).ToString();
+                        itm.SubItems[2].Text = (curRes.IsLong ? br.ReadUInt32() : br.ReadUInt16()).ToString();
                     }
                     else
                     {
