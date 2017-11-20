@@ -251,5 +251,12 @@ namespace AsteTweak
 
         public static Dictionary<uint, Resolution> Resolutions { get { return resolutions; } }
         public static Dictionary<uint, IKeyMapping> KeyMappings { get { return keyMappings; } }
+        public static Dictionary<uint, uint> RefreshRateMappings { get; } = new Dictionary<uint, uint>
+        {
+            // Steam 3.00
+            [0x5A02629E] = 0x00221922,
+            // DRM-free 3.00
+            [0x59F2F999] = 0x00221202
+        };
     }
 }
