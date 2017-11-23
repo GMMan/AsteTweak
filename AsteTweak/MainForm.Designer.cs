@@ -282,6 +282,8 @@
             this.resListView.TabIndex = 0;
             this.resListView.UseCompatibleStateImageBehavior = false;
             this.resListView.View = System.Windows.Forms.View.Details;
+            this.resListView.SubItemClicked += new ListViewEx.SubItemEventHandler(this.resListView_SubItemClicked);
+            this.resListView.SubItemEndEditing += new ListViewEx.SubItemEndEditingEventHandler(this.resListView_SubItemEndEditing);
             // 
             // columnHeader1
             // 
