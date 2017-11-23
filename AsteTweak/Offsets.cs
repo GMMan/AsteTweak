@@ -182,6 +182,8 @@ namespace AsteTweak
             { 0x56AE0E5C, new Resolution { TableBegin = 0x001CB3A0, IsLong = true, MaxCount = 11 } },
             // Ether Vapor Steam 2.08
             { 0x539C5182, new Resolution { TableBegin = 0x0013C348, IsLong = true, MaxCount = 10 } },
+            // Steam 3.01
+            { 0x5A1388BE, new Resolution { TableBegin = 0x0031C370 } },
         };
 
         static Dictionary<uint, IKeyMapping> keyMappings = new Dictionary<uint, IKeyMapping>
@@ -238,6 +240,13 @@ namespace AsteTweak
                 Oem1 = 0x000A2F7F, Oem102 = 0x000A2FA0, Oem2 = 0x000A2FBD, Oem6 = 0x000A2FDE,
                 TableBegin = 0x0013FAF0,
             } },
+            // Steam 3.01
+            { 0x5A1388BE, new AstebreedDefinitiveKeyMapping {
+                Up = 0x0022EC6F, Down = 0x0022EC8B, Left = 0x0022ECA7, Right = 0x0022ECC3,
+                W = 0x0022EC61, S = 0x0022EC82, A = 0x0022EC9E, D = 0x0022ECBA,
+                TableBegin = 0x003293C8,
+                Return = 0x0022ED12, LShift = 0x0022ED2A, RShift = 0x0022ED36, Escape = 0x0022ED4C
+            } }
             /* Template:
             { 0x, new KeyMapping {
                 Up = 0x, Down = 0x, Left = 0x, Right = 0x,
@@ -256,7 +265,9 @@ namespace AsteTweak
             // Steam 3.00
             [0x5A02629E] = 0x00221922,
             // DRM-free 3.00
-            [0x59F2F999] = 0x00221202
+            [0x59F2F999] = 0x00221202,
+            // Steam 3.01
+            [0x5A1388BE] = 0x00221A92
         };
     }
 }
