@@ -31,6 +31,7 @@ This program is compatible with the following versions of the game:
 * Trial 1.10
 * Trial 1.12
 * Steam 3.00 (Definitive Edition)
+* Steam 3.01 (Definitive Edition)
 * DRM-free/GOG 3.00 (Definitive Edition)
 * Fairy Bloom Freesia Steam 1.12
 * Ether Vapor Steam 2.08 (Remaster)
