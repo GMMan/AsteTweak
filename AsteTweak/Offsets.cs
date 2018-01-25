@@ -18,6 +18,7 @@ namespace AsteTweak
             public uint TableBegin { get; set; }
             public bool IsLong { get; set; }
             public int MaxCount { get; set; } = 14;
+            public int? RefreshRateOffset { get; set; }
         }
 
         public class FairyBloomKeyMapping : IKeyMapping
@@ -175,15 +176,17 @@ namespace AsteTweak
             // Trial 1.12
             { 0x52C7EB1B, new Resolution { TableBegin = 0x0027D1B0 } },
             // Steam 3.00
-            { 0x5A02629E, new Resolution { TableBegin = 0x0031C170 } },
+            { 0x5A02629E, new Resolution { TableBegin = 0x0031C170, RefreshRateOffset = 0x00221922 } },
             // DRM-free 3.00
-            { 0x59F2F999, new Resolution { TableBegin = 0x0031B920 } },
+            { 0x59F2F999, new Resolution { TableBegin = 0x0031B920, RefreshRateOffset = 0x00221202e } },
             // Fairy Bloom Freesia Steam 1.12
             { 0x56AE0E5C, new Resolution { TableBegin = 0x001CB3A0, IsLong = true, MaxCount = 11 } },
             // Ether Vapor Steam 2.08
             { 0x539C5182, new Resolution { TableBegin = 0x0013C348, IsLong = true, MaxCount = 10 } },
             // Steam 3.01
-            { 0x5A1388BE, new Resolution { TableBegin = 0x0031C370 } },
+            { 0x5A1388BE, new Resolution { TableBegin = 0x0031C370, RefreshRateOffset = 0x00221A92 } },
+            // DRM-free 3.02
+            { 0x5A27C677, new Resolution { TableBegin = 0x0031BD20, RefreshRateOffset = 0x002213D2 } },
         };
 
         static Dictionary<uint, IKeyMapping> keyMappings = new Dictionary<uint, IKeyMapping>
@@ -246,7 +249,14 @@ namespace AsteTweak
                 W = 0x0022EC61, S = 0x0022EC82, A = 0x0022EC9E, D = 0x0022ECBA,
                 TableBegin = 0x003293C8,
                 Return = 0x0022ED12, LShift = 0x0022ED2A, RShift = 0x0022ED36, Escape = 0x0022ED4C
-            } }
+            } },
+            // DRM-free 3.02
+            { 0x5A27C677, new AstebreedDefinitiveKeyMapping {
+                Up = 0x0022E6AF, Down = 0x0022E6CB, Left = 0x0022E6E7, Right = 0x0022E703,
+                W = 0x0022E6A1, S = 0x0022E6C2, A = 0x0022E6DE, D = 0x0022E6FA,
+                TableBegin = 0x00328AF8,
+                Return = 0x0022E752, LShift = 0x0022E76A, RShift = 0x0022E776, Escape = 0x0022E78C
+            } },
             /* Template:
             { 0x, new KeyMapping {
                 Up = 0x, Down = 0x, Left = 0x, Right = 0x,
@@ -260,14 +270,5 @@ namespace AsteTweak
 
         public static Dictionary<uint, Resolution> Resolutions { get { return resolutions; } }
         public static Dictionary<uint, IKeyMapping> KeyMappings { get { return keyMappings; } }
-        public static Dictionary<uint, uint> RefreshRateMappings { get; } = new Dictionary<uint, uint>
-        {
-            // Steam 3.00
-            [0x5A02629E] = 0x00221922,
-            // DRM-free 3.00
-            [0x59F2F999] = 0x00221202,
-            // Steam 3.01
-            [0x5A1388BE] = 0x00221A92
-        };
     }
 }

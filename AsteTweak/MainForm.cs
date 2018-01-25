@@ -16,7 +16,6 @@ namespace AsteTweak
         string curPath;
         Offsets.Resolution curRes;
         Offsets.IKeyMapping curKeys;
-        uint? curRefreshOffset;
         TextBox textEditor = new TextBox { Visible = false };
         KeyReaderControl keyEditor = new KeyReaderControl { Visible = false };
 
@@ -73,10 +72,6 @@ namespace AsteTweak
                     MessageBox.Show(this, "Could not find offsets for this version of the game.", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                if (Offsets.RefreshRateMappings.ContainsKey(timestamp))
-                    curRefreshOffset = Offsets.RefreshRateMappings[timestamp];
-                else
-                    curRefreshOffset = null;
             }
 
             exePathLabel.Text = curPath = path;
@@ -115,9 +110,9 @@ namespace AsteTweak
                 }
 
                 // Read refresh rate
-                if (curRefreshOffset.HasValue)
+                if (curRes.RefreshRateOffset.HasValue)
                 {
-                    fs.Seek(curRefreshOffset.Value, SeekOrigin.Begin);
+                    fs.Seek(curRes.RefreshRateOffset.Value, SeekOrigin.Begin);
                     refreshRateNumericUpDown.Value = -br.ReadSByte() + 1;
                     refreshRateNumericUpDown.Enabled = true;
                 }
@@ -196,9 +191,9 @@ namespace AsteTweak
                 }
 
                 // Read refresh rate
-                if (curRefreshOffset.HasValue)
+                if (curRes.RefreshRateOffset.HasValue)
                 {
-                    fs.Seek(curRefreshOffset.Value, SeekOrigin.Begin);
+                    fs.Seek(curRes.RefreshRateOffset.Value, SeekOrigin.Begin);
                     bw.Write(((sbyte)-(refreshRateNumericUpDown.Value - 1)));
                 }
 
