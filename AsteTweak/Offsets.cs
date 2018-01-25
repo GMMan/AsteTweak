@@ -187,6 +187,8 @@ namespace AsteTweak
             { 0x5A1388BE, new Resolution { TableBegin = 0x0031C370, RefreshRateOffset = 0x00221A92 } },
             // DRM-free 3.02
             { 0x5A27C677, new Resolution { TableBegin = 0x0031BD20, RefreshRateOffset = 0x002213D2 } },
+            // Steam 3.02
+            { 0x5A27C6D4, new Resolution { TableBegin = 0x0031C370, RefreshRateOffset = 0x00221AF2 } },
         };
 
         static Dictionary<uint, IKeyMapping> keyMappings = new Dictionary<uint, IKeyMapping>
@@ -256,6 +258,13 @@ namespace AsteTweak
                 W = 0x0022E6A1, S = 0x0022E6C2, A = 0x0022E6DE, D = 0x0022E6FA,
                 TableBegin = 0x00328AF8,
                 Return = 0x0022E752, LShift = 0x0022E76A, RShift = 0x0022E776, Escape = 0x0022E78C
+            } },
+            // Steam 3.02
+            { 0x5A27C6D4, new AstebreedDefinitiveKeyMapping {
+                Up = 0x0022EDCF, Down = 0x0022EDEB, Left = 0x0022EE07, Right = 0x0022EE23,
+                W = 0x0022EDC1, S = 0x0022EDE2, A = 0x0022EDFE, D = 0x0022EE1A,
+                TableBegin = 0x003293D8,
+                Return = 0x0022EE72, LShift = 0x0022EE8A, RShift = 0x0022EE96, Escape = 0x0022EEAC
             } },
             /* Template:
             { 0x, new KeyMapping {
